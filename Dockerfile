@@ -1,13 +1,12 @@
-FROM buildpack-deps:xenial AS build
+FROM lamho/centos7 AS build
 ARG TARGET=x86_64-unknown-linux-gnu
 ARG GIT_SSL_NO_VERIFY=true
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends software-properties-common && \
-    add-apt-repository -y ppa:git-core/ppa && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends git && \
+RUN yum update && \
+    yum install centos-release-scl && \
+    yum install devtoolset-8-gcc* && \
+    scl enable devtoolset-8 bash && \
     sh -c "$(curl -sSLfk https://sh.rustup.rs)" -- -y --no-modify-path --target "$TARGET"
 
 COPY src /app
