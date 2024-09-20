@@ -24,10 +24,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {target: aarch64-unknown-linux-musl, os: ubuntu-latest, cross: true}
-          - {target: aarch64-apple-darwin, os: macos-latest, cross: false}
           - {target: x86_64-unknown-linux-musl, os: ubuntu-latest, cross: true}
-          - {target: x86_64-apple-darwin, os: macos-13, cross: false}
 
     name: Build ${{matrix.target}}
     runs-on: ${{ matrix.os }}
@@ -87,19 +84,9 @@ jobs:
           EOF
           cat Cross.toml
 
-      - name: build grammars (linux)
-        if: runner.os == 'Linux'
-        run: |-
-          ${{ env.CARGO }} run --package=helix-loader --bin=hx-loader --target ${{ matrix.target }}
-
-      - name: build grammars (macOS)
-        if: runner.os == 'macOS'
-        run: |-
-          ${{ env.CARGO }} run --package=helix-loader --bin=hx-loader
-
       - name: Build release binary
         run: |-
-          ${{ env.CARGO }} build --release --locked --target ${{ matrix.target }}
+          ${{ env.CARGO }} install --path helix-term --locked --target ${{ matrix.target }}
           rm -rf runtime/grammars/sources
 
       - name: Upload ${{matrix.target}}
