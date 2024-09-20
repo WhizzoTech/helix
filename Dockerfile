@@ -1,4 +1,4 @@
-FROM lamho/centos7 AS build
+FROM paigeeworld/centos7 AS build
 ARG TARGET=x86_64-unknown-linux-gnu
 ARG GIT_SSL_NO_VERIFY=true
 ARG DEBIAN_FRONTEND=noninteractive
